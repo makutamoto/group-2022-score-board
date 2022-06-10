@@ -1,3 +1,4 @@
+import enum
 import tkinter as tk
 import tkinter.font as tkFont
 import json
@@ -51,12 +52,21 @@ class SegWithTitle(tk.Frame):
     def set_on(self, value):
         self.seg.set_on(value)
 
+class Scene(enum.Enum):
+    NONE = enum.auto()
+    TITLE = enum.auto()
+    GAME = enum.auto()
+
+
 class ScoreBoard(tk.Frame):
     titleFont = tkFont.Font(family="PixelMplus12", size=100)
     segFont = tkFont.Font(family="DSEG7 Classic Bold Italic", size=32)
     
-    score = 122
-    time = 180
+    mode = Scene.NONE
+
+    DATA = './data.json'
+    TIME =  180
+
     def __init__(self, parent):
         tk.Frame.__init__(self, parent)
         
@@ -68,7 +78,7 @@ class ScoreBoard(tk.Frame):
         self.titleLabel = tk.Label(self.titleFrame, text="SHOOTING GAME", font=self.titleFont)
         self.titleLabel.grid(column=1, row=0)
 
-        self.scoreSeg = SegWithTitle(self, "SCORE", self.score, height=200)
+        self.scoreSeg = SegWithTitle(self, "SCORE", 0, height=200)
         self.scoreSeg.grid(column=0, row=4)
         
         self.subFrame = tk.Frame(self)
@@ -79,31 +89,76 @@ class ScoreBoard(tk.Frame):
         self.recordSeg = SegWithTitle(self.subFrame, "RECORD", self.data['record'], height=100, color="#00ff1e", background="#003606")
         self.recordSeg.grid(column=0, row=0, sticky=tk.NE)
         
-        self.timeSeg = SegWithTitle(self.subFrame, "TIME", self.time, height=100, color="#ffe100", background="#2e2900")
+        self.timeSeg = SegWithTitle(self.subFrame, "TIME", self.TIME, height=100, color="#ffe100", background="#2e2900")
+        self.reset_time()
         self.timeSeg.grid(column=2, row=0, sticky=tk.NE)
 
-        self.count()
         self.title()
 
     index = 0
     title_text = '!!!PRES!BTN!!'
     def title(self):
+        if self.mode == Scene.TITLE:
+            return
+        self.index = 0
+        self.mode = Scene.TITLE
+        self.titleAnimation()
+        self.reset_time()
+    
+    def titleAnimation(self):
+        if self.mode != Scene.TITLE:
+            return
         if self.index == len(self.title_text) - 1:
             self.index = 0
         self.scoreSeg.set_value(self.title_text[self.index:self.index + 3])
         self.index += 1
-        app.after(300, self.title)
+        app.after(300, self.titleAnimation)
     
     def load_data(self):
         data = { "record": 0 }
         try:
-            with open('./data.json', 'r') as f:
+            with open(self.DATA, 'r') as f:
                 data = json.load(f)
         except:
             pass
         return data
 
+    def record(self):
+        print(self.data)
+        if self.data['record'] < self.score:
+            with open(self.DATA, 'w') as f:
+                json.dump({ 'record': self.score }, f)
+            self.recordSeg.set_value(self.score)
+            self.show_record()
+
+    def show_record(self):
+        self.recordSeg.set_on(self.blink % 2 == 0)
+        if self.blink == 6:
+            self.blink = 0
+            return
+        self.blink += 1
+        app.after(250, self.show_record)
+    
+    def reset_time(self):
+        self.time = self.TIME
+        self.timeSeg.set_value(self.time)
+
+    def start(self):
+        if self.mode == Scene.GAME:
+            return
+        self.mode = Scene.GAME
+        self.scoreSeg.set_value(0)
+        self.score = 0
+        self.reset_time()
+        self.count()
+    
+    def shoot(self):
+        self.score += 1
+        self.scoreSeg.set_value(self.score)
+    
     def count(self):
+        if self.mode != Scene.GAME:
+            return
         if self.time == -1:
             self.show_score()
             return
@@ -116,18 +171,29 @@ class ScoreBoard(tk.Frame):
         self.scoreSeg.set_on(self.blink % 2 == 0)
         if self.blink == 6:
             self.blink = 0
+            self.record()
             return
         self.blink += 1
         app.after(250, self.show_score)
 
 
-def quit(event):
+def key(event):
     if event.keysym == 'q' or event.keysym == 'Q':
         app.destroy()
+    elif event.keysym == 's' or event.keysym == 'S':
+        scoreboard.start()
+    elif event.keysym == 'p' or event.keysym == 'P':
+        scoreboard.shoot()
+    elif event.keysym == 't' or event.keysym == 'T':
+        scoreboard.title()
+    elif event.keysym == 'c' or event.keysym == 'C':
+        scoreboard.time = 3
 
 if __name__ == "__main__":
+    global scoreboard
     app.attributes('-fullscreen', True)
-    ScoreBoard(app).grid()
+    scoreboard = ScoreBoard(app)
+    scoreboard.grid()
     app.grid_columnconfigure(0, weight=1)
-    app.bind('<KeyPress>', quit)
+    app.bind('<KeyPress>', key)
     app.mainloop()
