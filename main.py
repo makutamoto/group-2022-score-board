@@ -4,9 +4,9 @@ import tkinter.font as tkFont
 import json
 import pygame
 
-PLAYING = './playing.mp3'
-SHOOT = './shoot.mp3'
-TITLE = './title.mp3'
+PLAYING = './playing.ogg'
+SHOOT = './shoot.ogg'
+TITLE = './title.ogg'
 
 app = tk.Tk()
 
