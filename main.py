@@ -3,12 +3,16 @@ import tkinter as tk
 import tkinter.font as tkFont
 import json
 import pygame
+import serial
+import sys
 
 PLAYING = './playing.ogg'
 SHOOT = './shoot.ogg'
 TITLE = './title.ogg'
 
 app = tk.Tk()
+
+ser = None
 
 class Seg(tk.Canvas):
     font_name = "DSEG14 Classic"
@@ -104,6 +108,8 @@ class ScoreBoard(tk.Frame):
         self.titleSound = pygame.mixer.Sound(TITLE)
 
         self.title()
+        if ser != None:
+            self.communication()
 
     index = 0
     title_text = '!!!PRES!BTN!!'
@@ -192,10 +198,20 @@ class ScoreBoard(tk.Frame):
         self.blink += 1
         app.after(250, self.show_score)
     
-    def play_bgm(selff, sound):
+    def play_bgm(self, sound):
         pygame.mixer.stop()
         sound.play(-1)
 
+    def communication(self):
+        command = ser.readline().strip()
+        if len(command) > 0:
+            if command == b'B':
+                self.start()
+            elif command == b'A':
+                self.shoot()
+            elif command == b'C':
+                self.title()
+        app.after(10, self.communication)
 
 def key(event):
     if event.keysym == 'q' or event.keysym == 'Q':
@@ -211,6 +227,8 @@ def key(event):
 
 if __name__ == "__main__":
     global scoreboard
+    if len(sys.argv) == 2:
+        ser = serial.Serial(sys.argv[1], 115200, timeout=0)
     app.attributes('-fullscreen', True)
     pygame.init()
     scoreboard = ScoreBoard(app)
