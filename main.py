@@ -2,6 +2,11 @@ import enum
 import tkinter as tk
 import tkinter.font as tkFont
 import json
+import pygame
+
+PLAYING = './playing.mp3'
+SHOOT = './shoot.mp3'
+TITLE = './title.mp3'
 
 app = tk.Tk()
 
@@ -93,6 +98,11 @@ class ScoreBoard(tk.Frame):
         self.reset_time()
         self.timeSeg.grid(column=2, row=0, sticky=tk.NE)
 
+        self.playingSound = pygame.mixer.Sound(PLAYING)
+        self.playingSound.set_volume(0.5)
+        self.shootSound = pygame.mixer.Sound(SHOOT)
+        self.titleSound = pygame.mixer.Sound(TITLE)
+
         self.title()
 
     index = 0
@@ -104,6 +114,7 @@ class ScoreBoard(tk.Frame):
         self.mode = Scene.TITLE
         self.titleAnimation()
         self.reset_time()
+        self.play_bgm(self.titleSound)
     
     def titleAnimation(self):
         if self.mode != Scene.TITLE:
@@ -151,15 +162,20 @@ class ScoreBoard(tk.Frame):
         self.score = 0
         self.reset_time()
         self.count()
+        self.play_bgm(self.playingSound)
     
     def shoot(self):
+        if self.mode != Scene.GAME:
+            return
         self.score += 1
         self.scoreSeg.set_value(self.score)
+        self.shootSound.play()
     
     def count(self):
         if self.mode != Scene.GAME:
             return
         if self.time == -1:
+            self.playingSound.stop()
             self.show_score()
             return
         self.timeSeg.set_value(self.time)
@@ -175,6 +191,10 @@ class ScoreBoard(tk.Frame):
             return
         self.blink += 1
         app.after(250, self.show_score)
+    
+    def play_bgm(selff, sound):
+        pygame.mixer.stop()
+        sound.play(-1)
 
 
 def key(event):
@@ -192,6 +212,7 @@ def key(event):
 if __name__ == "__main__":
     global scoreboard
     app.attributes('-fullscreen', True)
+    pygame.init()
     scoreboard = ScoreBoard(app)
     scoreboard.grid()
     app.grid_columnconfigure(0, weight=1)
