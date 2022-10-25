@@ -147,7 +147,7 @@ class ScoreBoard(tk.Frame):
         if self.data['record'] < self.score:
             with open(self.DATA, 'w') as f:
                 json.dump({ 'record': self.score }, f)
-            self.load_data()
+            self.data = self.load_data()
             self.recordSeg.set_value(self.score)
             self.show_record()
 
