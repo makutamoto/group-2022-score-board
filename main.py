@@ -5,6 +5,7 @@ import json
 import pygame
 import serial
 import sys
+import threading
 
 import receipt
 
@@ -186,7 +187,8 @@ class ScoreBoard(tk.Frame):
             return
         if self.time == -1:
             self.playingSound.stop()
-            receipt.score_draw(self.score)
+            receipt_thread = threading.Thread(target=receipt.score_draw, args=(self.score,))
+            receipt_thread.start()
             self.show_score()
             return
         self.timeSeg.set_value(self.time)
