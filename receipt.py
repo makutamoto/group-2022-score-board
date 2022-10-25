@@ -12,11 +12,11 @@ width = 500
 height = 355
 
 
-font1 = ImageFont.truetype('PixelMplus12-Bold.ttf', 28, encoding='unic')
-font2 = ImageFont.truetype('DSEG14Classic-BoldItalic.ttf', 100, encoding='unic')
-font3 = ImageFont.truetype('PixelMplus12-Bold.ttf', 50, encoding='unic')
-font4 = ImageFont.truetype('PixelMplus12-Bold.ttf', 35, encoding='unic')
-font5 = ImageFont.truetype('PixelMplus12-Bold.ttf', 37, encoding='unic')
+font1 = ImageFont.truetype('./scoreboard-fonts/PixelMplus12-Bold.ttf', 28, encoding='unic')
+font2 = ImageFont.truetype('./scoreboard-fonts/DSEG14Classic-BoldItalic.ttf', 100, encoding='unic')
+font3 = ImageFont.truetype('./scoreboard-fonts/PixelMplus12-Bold.ttf', 50, encoding='unic')
+font4 = ImageFont.truetype('./scoreboard-fonts/PixelMplus12-Bold.ttf', 35, encoding='unic')
+font5 = ImageFont.truetype('./scoreboard-fonts/PixelMplus12-Bold.ttf', 37, encoding='unic')
 
 p = Usb(0x0416, 0x5011, 0, 0x81, 0x07)
 
