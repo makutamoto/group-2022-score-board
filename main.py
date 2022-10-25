@@ -6,6 +6,8 @@ import pygame
 import serial
 import sys
 
+import receipt
+
 PLAYING = './playing.ogg'
 SHOOT = './shoot.ogg'
 TITLE = './title.ogg'
@@ -141,10 +143,10 @@ class ScoreBoard(tk.Frame):
         return data
 
     def record(self):
-        print(self.data)
         if self.data['record'] < self.score:
             with open(self.DATA, 'w') as f:
                 json.dump({ 'record': self.score }, f)
+            self.load_data()
             self.recordSeg.set_value(self.score)
             self.show_record()
 
@@ -173,6 +175,8 @@ class ScoreBoard(tk.Frame):
     def shoot(self):
         if self.mode != Scene.GAME:
             return
+        if self.time == -1:
+            return
         self.score += 1
         self.scoreSeg.set_value(self.score)
         self.shootSound.play()
@@ -182,6 +186,7 @@ class ScoreBoard(tk.Frame):
             return
         if self.time == -1:
             self.playingSound.stop()
+            receipt.score_draw(self.score)
             self.show_score()
             return
         self.timeSeg.set_value(self.time)
