@@ -12,6 +12,7 @@ import receipt_print
 PLAYING = './playing.ogg'
 SHOOT = './shoot.ogg'
 TITLE = './title.ogg'
+END = './bbasketball_buzzer1 2.mp3'
 
 app = tk.Tk()
 
@@ -109,6 +110,7 @@ class ScoreBoard(tk.Frame):
         self.playingSound.set_volume(0.5)
         self.shootSound = pygame.mixer.Sound(SHOOT)
         self.titleSound = pygame.mixer.Sound(TITLE)
+        self.endSound = pygame.mixer.Sound(END)
 
         self.title()
         if ser != None:
@@ -189,6 +191,7 @@ class ScoreBoard(tk.Frame):
             self.playingSound.stop()
             receipt_thread = threading.Thread(target=receipt_print.score_draw, args=(self.score,))
             receipt_thread.start()
+            self.endSound.play()
             self.show_score()
             return
         self.timeSeg.set_value(self.time)
