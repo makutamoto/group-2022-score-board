@@ -77,7 +77,7 @@ class ScoreBoard(tk.Frame):
     mode = Scene.NONE
 
     DATA = './data.json'
-    TIME =  60
+    TIME =  30
 
     def __init__(self, parent):
         tk.Frame.__init__(self, parent)
