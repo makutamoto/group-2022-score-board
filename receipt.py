@@ -16,26 +16,20 @@ font5 = ImageFont.truetype('./scoreboard-fonts/PixelMplus12-Bold.ttf', 37, encod
 font6 = ImageFont.truetype('./scoreboard-fonts/PixelMplus12-Bold.ttf', 18, encoding='unic')
 
 def receipt(score:int):
-    image = Image.new('1', (width, 255), 255)
+    image = Image.new('1', (width, height), 255)
     draw = ImageDraw.Draw(image)
     draw.text((0, 0), f"{now_datetime.strftime('%Y/%m/%d %H:%M')}", font=font1, fill=0)
     draw.text((0, 30), "Basket-Shooter", font=font5, fill=0)
     draw.text((0, 100), f"{score}", font=font2, fill=0)
     draw.text((300, 195), "point", font=font1, fill=0)
     draw.text((0, 225), "- - - - - - - - - - - - - -", font=font1, fill=0)
-    return image
-
-def coupon():
-    image = Image.new('1', (width, 130), 255)
-    draw = ImageDraw.Draw(image)
-    draw.text((0, 0), "5E たこ焼き", font=font3, fill=0)
-    draw.text((0, 60), "ねぎ・明太マヨ", font=font4, fill=0)
-    draw.text((71, 95), "50円割引き！", font=font4, fill=0)
-    draw.text((295, 95), "クーポン", font=font6, fill=0)
-    draw.text((295, 113), "使用済印", font=font6, fill=0)
-    draw.rectangle((285, 0, 377, 92), width=3)
+    draw.text((0, 255), "5E たこ焼き", font=font3, fill=0)
+    draw.text((0, 315), "ねぎ・明太マヨ", font=font4, fill=0)
+    draw.text((71, 350), "50円割引き！", font=font4, fill=0)
+    draw.text((295, 350), "クーポン", font=font6, fill=0)
+    draw.text((295, 368), "使用済印", font=font6, fill=0)
+    draw.rectangle((285, 255, 377, 347), width=3)
     return image
 
 if __name__ == '__main__':
-    receipt(100).save('receipt.png')
-    coupon().save('coupon.png')
+    receipt(100).save('test.png')
