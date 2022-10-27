@@ -188,8 +188,8 @@ class ScoreBoard(tk.Frame):
         if self.mode != Scene.GAME:
             return
         if self.time == -1:
-            self.playingSound.stop()
             self.endSound.play()
+            self.playingSound.stop()
             receipt_thread = threading.Thread(target=receipt_print.score_draw, args=(self.score,))
             receipt_thread.start()
             self.show_score()
