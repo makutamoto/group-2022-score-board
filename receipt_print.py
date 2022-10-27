@@ -6,7 +6,7 @@ from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
 
-from receipt import receipt
+from receipt import receipt, coupon
 
 now_datetime = datetime.now()
 
@@ -25,6 +25,11 @@ p = Usb(0x0416, 0x5011, 0, 0x81, 0x07)
 def score_draw(score:int):
     p.text(" ")
     p.image(receipt(score))
+    p.cut()
+
+def coupon_draw():
+    p.text(" ")
+    p.image(coupon())
     p.cut()
 
 if __name__ == '__main__':

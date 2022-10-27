@@ -69,6 +69,7 @@ class Scene(enum.Enum):
     NONE = enum.auto()
     TITLE = enum.auto()
     GAME = enum.auto()
+    END = enum.auto()
 
 
 class ScoreBoard(tk.Frame):
@@ -188,6 +189,7 @@ class ScoreBoard(tk.Frame):
         if self.mode != Scene.GAME:
             return
         if self.time == -1:
+            self.mode = Scene.END
             self.endSound.play()
             self.playingSound.stop()
             receipt_thread = threading.Thread(target=receipt_print.score_draw, args=(self.score,))
@@ -208,6 +210,11 @@ class ScoreBoard(tk.Frame):
         self.blink += 1
         app.after(250, self.show_score)
     
+    def print_coupon(self):
+        if self.mode != Scene.END:
+            return
+        receipt_print.coupon()        
+
     def play_bgm(self, sound):
         pygame.mixer.stop()
         sound.play(-1)
@@ -232,8 +239,10 @@ def key(event):
         scoreboard.shoot()
     elif event.keysym == 't' or event.keysym == 'T':
         scoreboard.title()
-    elif event.keysym == 'c' or event.keysym == 'C':
+    elif event.keysym == 'r' or event.keysym == 'R':
         scoreboard.time = 3
+    elif event.keysym == 'c' or event.keysym == 'C':
+        scoreboard.print_coupon()
 
 if __name__ == "__main__":
     global scoreboard
