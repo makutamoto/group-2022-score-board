@@ -12,7 +12,7 @@ import receipt_print
 PLAYING = './playing.ogg'
 SHOOT = './shoot.ogg'
 TITLE = './title.ogg'
-END = './basketball_buzzer1 2.mp3'
+END = './basketball_buzzer1 2.ogg'
 
 app = tk.Tk()
 
