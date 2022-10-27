@@ -24,11 +24,8 @@ def receipt(score:int):
     draw.text((300, 195), "point", font=font1, fill=0)
     draw.text((0, 225), "- - - - キリトリ線 - - - -", font=font1, fill=0)
     draw.text((0, 255), "5E たこ焼き", font=font3, fill=0)
-    draw.text((0, 315), "ねぎ・明太マヨ", font=font4, fill=0)
-    draw.text((71, 350), "50円割引き！", font=font4, fill=0)
-    draw.text((295, 350), "クーポン", font=font6, fill=0)
-    draw.text((285, 368), "使用可能印", font=font6, fill=0)
-    draw.rectangle((285, 255, 377, 347), width=3)
+    draw.text((125, 315), "ねぎ・明太マヨ", font=font4, fill=0)
+    draw.text((171, 350), "50円割引き！", font=font4, fill=0)
     return image
 
 if __name__ == '__main__':
