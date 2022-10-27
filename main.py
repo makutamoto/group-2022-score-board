@@ -7,7 +7,7 @@ import serial
 import sys
 import threading
 
-import receipt
+import receipt_print
 
 PLAYING = './playing.ogg'
 SHOOT = './shoot.ogg'
@@ -187,7 +187,7 @@ class ScoreBoard(tk.Frame):
             return
         if self.time == -1:
             self.playingSound.stop()
-            receipt_thread = threading.Thread(target=receipt.score_draw, args=(self.score,))
+            receipt_thread = threading.Thread(target=receipt_print.score_draw, args=(self.score,))
             receipt_thread.start()
             self.show_score()
             return
