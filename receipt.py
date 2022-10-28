@@ -3,7 +3,6 @@ from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
 
-now_datetime = datetime.now()
 
 width = 377
 height = 390
@@ -16,6 +15,7 @@ font5 = ImageFont.truetype('./scoreboard-fonts/PixelMplus12-Bold.ttf', 37, encod
 font6 = ImageFont.truetype('./scoreboard-fonts/PixelMplus12-Bold.ttf', 18, encoding='unic')
 
 def receipt(score:int):
+    now_datetime = datetime.now()
     image = Image.new('1', (width, height), 255)
     draw = ImageDraw.Draw(image)
     draw.text((0, 0), f"{now_datetime.strftime('%Y/%m/%d %H:%M')}", font=font1, fill=0)
